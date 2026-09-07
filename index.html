@@ -107,7 +107,7 @@ footer{padding:36px 0;color:var(--muted);font-size:14px;border-top:1px solid var
 </section>
 
 <section id="pricing">
-  <h2>Pricing</h2><p class="lead">One credit per video, up to three minutes. Credits never expire. Top-ups land on your existing key.</p>
+  <h2>Pricing</h2><p class="lead">One credit per video, up to three minutes. Only successful videos cost credits. Credits never expire. Top-ups land on your existing key.</p>
   <div class="grid g4">
     <div class="card price"><h3>Starter</h3><div class="amt">€0</div><div class="per">25 credits, once</div><ul><li>All features</li><li>No card needed</li><li>Key shown right after checkout</li></ul><a class="btn" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Start free</a></div>
     <div class="card price"><h3>250 credits</h3><div class="amt">€9</div><div class="per">3.6 ct per video</div><ul><li>Good for a first channel</li><li>One-time payment</li><li>Never expires</li></ul><a class="btn" href="https://buy.polar.sh/polar_cl_wvHItL5DXD7JYHj1VB3VeJKxCh7gqxyA79KKj1m9Yik">Buy</a></div>
@@ -130,6 +130,7 @@ footer{padding:36px 0;color:var(--muted);font-size:14px;border-top:1px solid var
   <h2>FAQ</h2>
   <details><summary>Where is my data processed and stored?</summary><p>Processing runs on Google Cloud in Frankfurt. Results are stored on Cloudflare R2 restricted to the EU jurisdiction and deleted after 24 hours; the download link itself expires after one hour.</p></details>
   <details><summary>Does a video cost one credit regardless of length?</summary><p>Yes, up to three minutes. Longer inputs are rejected before processing and cost nothing.</p></details>
+  <details><summary>What if a job fails?</summary><p>Only successful videos cost credits. If the download, the encode or the upload fails after your key was charged, the credit is returned automatically and the error response says so (<code>credits_refunded: true</code>).</p></details>
   <details><summary>Do credits expire? Do top-ups create a new key?</summary><p>Credits never expire. Buying more with the same email adds them to the key you already have, so nothing changes in your workflow.</p></details>
   <details><summary>I lost my key.</summary><p>Keys are shown once, right after checkout, and are not stored in plaintext on our side. Contact support and we will issue a new key with your remaining credits.</p></details>
   <details><summary>Does Brand-Pipe remove AI labels or watermarks?</summary><p>No. Brand-Pipe formats, brands and normalises your video. Provenance metadata your generator embeds is not something we strip, and platform disclosure rules remain your responsibility.</p></details>
