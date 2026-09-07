@@ -120,7 +120,10 @@ footer{padding:36px 0;color:var(--muted);font-size:14px;border-top:1px solid var
 
 <section id="n8n">
   <h2>Free n8n templates</h2><p class="lead">Import, paste your key, run. The workflow posts a video, waits for the result and downloads the finished file as binary data for your upload node. Tested on n8n 2.37.10.</p>
-  <img class="shot" src="n8n-workflow.png" alt="The Brand-Pipe workflow in the n8n editor: manual trigger, Set video, HTTP request to Brand-Pipe, an IF node on success, and a download node that produces the finished MP4 as binary data." width="1200" height="720" loading="lazy">
+  <picture>
+    <source srcset="n8n-workflow-dark.png" media="(prefers-color-scheme:dark)">
+    <img class="shot" src="n8n-workflow.png" alt="The Brand-Pipe workflow in the n8n editor: manual trigger, Set video, HTTP request to Brand-Pipe, an IF node on success, and a download node that produces the finished MP4 as binary data." width="1200" height="720" loading="lazy">
+  </picture>
   <div class="grid g3">
     <div class="card step"><h3>Import</h3><p>Download <a href="n8n-brand-pipe.json" download>n8n-brand-pipe.json</a> and import it via <em>Workflow → Import from file</em>.</p></div>
     <div class="card step"><h3>Add the credential</h3><p>Create a <em>Header Auth</em> credential named exactly <strong>Brand-Pipe API Key</strong>: header name <code>X-API-Key</code>, value your key. Both templates look the credential up by that name, so it only has to be set up once.</p></div>
