@@ -31,7 +31,7 @@
     {
       "parameters": {
         "method": "POST",
-        "url": "https://brand-pipe-api-zpvrfqoxuq-ey.a.run.app/v1/process",
+        "url": "https://api.brand-pipe.com/v1/process",
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
         "sendBody": true,
