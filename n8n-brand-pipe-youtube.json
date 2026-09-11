@@ -3,7 +3,7 @@
   "nodes": [
     {
       "parameters": {
-        "content": "## Replace this node\nThis Set node stands in for your video generator. Put the node that produces the clip here \u2014 Kling, Sora, Runway, HeyGen, an ElevenLabs voice-over step or an HTTP Request against your own render service \u2014 and make sure it hands the next node a public `video_url` plus a `title` and a `description`.",
+        "content": "## Replace this node\nThis Set node stands in for your video generator. Put the node that produces the clip here — Kling, Sora, Runway, HeyGen, an ElevenLabs voice-over step or an HTTP Request against your own render service — and make sure it hands the next node a public `video_url` plus a `title` and a `description`.",
         "height": 240,
         "width": 340,
         "color": 4
@@ -19,7 +19,7 @@
     },
     {
       "parameters": {
-        "content": "## Brand-Pipe\nHeader Auth credential named `Brand-Pipe API Key`: header name `X-API-Key`, value your key from https://www.brand-pipe.com. One call fits the clip to 9:16, puts your logo bottom-right and normalises loudness to \u221214 LUFS; the answer carries a signed download link that is valid for one hour. Only successful jobs cost a credit \u2014 the lower branch stops the run with the message from the API.",
+        "content": "## Brand-Pipe\nHeader Auth credential named `Brand-Pipe API Key`: header name `X-API-Key`, value your key from https://www.brand-pipe.com. One call fits the clip to 9:16, puts your logo bottom-right and normalises loudness to −14 LUFS; the answer carries a signed download link that is valid for one hour. Only successful jobs cost a credit — the lower branch stops the run with the message from the API.",
         "height": 280,
         "width": 380,
         "color": 4
@@ -140,6 +140,15 @@
               "neverError": true
             }
           }
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "={{ $execution.id }}-{{ $itemIndex }}"
+            }
+          ]
         }
       },
       "id": "b2c3d4e5-0003-4000-8000-000000000003",

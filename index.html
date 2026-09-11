@@ -102,8 +102,12 @@ footer{padding:36px 0;color:var(--muted);font-size:14px;border-top:1px solid var
   <div class="grid g4" style="margin-top:16px">
     <div class="card"><h3>format</h3><p><code>vertical</code> 1080×1920 · <code>square</code> 1080×1080 · <code>landscape</code> 1920×1080</p></div>
     <div class="card"><h3>logo_url</h3><p>PNG with transparency. Scaled to 15 % of the width, 20 px from the corner.</p></div>
-    <div class="card"><h3>Limits</h3><p>Up to 3 minutes and 200 MB per video. Public http(s) URLs only.</p></div>
-    <div class="card"><h3>Errors</h3><p>401 bad key · 402 no credits · 413 too large · 422 unreadable video · 424 source download failed · 429 rate limited</p></div>
+    <div class="card"><h3>Limits</h3><p>Up to 3 minutes and 200 MB per video, 10 minutes via <code>/v1/jobs</code>. Public http(s) URLs only. Results are kept for 24 hours.</p></div>
+    <div class="card"><h3>Errors</h3><p>401 bad key · 402 no credits · 409 idempotency conflict · 413 too large · 422 unreadable video · 424 source download failed · 429 rate limited</p></div>
+  </div>
+  <div class="grid g2" style="margin-top:16px">
+    <div class="card"><h3>Retries never pay twice</h3><p>Send <code>Idempotency-Key: {{ $execution.id }}-{{ $itemIndex }}</code> and a retried request — n8n's <em>Retry On Fail</em>, a lost response, a timeout — gets the first result back instead of a second charge and a second render. Keys are remembered for 24 hours.</p></div>
+    <div class="card"><h3>Long clips: submit, then get called back</h3><p><code>POST /v1/jobs</code> takes the same body plus an optional <code>callback_url</code>, answers at once with a <code>status_url</code>, and posts the finished job to your URL — an n8n <em>Wait</em> node resumes on it. Polling the status URL is free and always works too.</p></div>
   </div>
 </section>
 
@@ -140,6 +144,7 @@ footer{padding:36px 0;color:var(--muted);font-size:14px;border-top:1px solid var
   <details><summary>Do credits expire? Do top-ups create a new key?</summary><p>Credits never expire. Buying more with the same email adds them to the key you already have, so nothing changes in your workflow.</p></details>
   <details><summary>I lost my key.</summary><p>Keys are shown once, right after checkout, and are not stored in plaintext on our side. Contact support and we will issue a new key with your remaining credits.</p></details>
   <details><summary>Does Brand-Pipe remove AI labels or watermarks?</summary><p>No. Brand-Pipe formats, brands and normalises your video. Provenance metadata your generator embeds is not something we strip, and platform disclosure rules remain your responsibility.</p></details>
+  <details><summary>What happens under load?</summary><p>Requests beyond the service's capacity wait at the edge rather than fail; asynchronous jobs wait in a queue and are never dropped. Each key has a rate limit; a <code>429</code> means back off and retry — with an <code>Idempotency-Key</code>, retrying is always safe.</p></details>
   <details><summary>Can I use it without n8n?</summary><p>Yes. It is a plain HTTPS API. Make, Zapier, a cron job or a shell script work just as well.</p></details>
 </section>
 </main>

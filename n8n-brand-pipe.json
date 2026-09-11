@@ -118,6 +118,15 @@
               "neverError": true
             }
           }
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "={{ $execution.id }}-{{ $itemIndex }}"
+            }
+          ]
         }
       },
       "id": "a1b2c3d4-0003-4000-8000-000000000003",
