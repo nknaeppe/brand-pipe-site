@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>API Documentation — Brand-Pipe</title>
+<meta name="description" content="Developer documentation for the Brand-Pipe API: authentication, POST /v1/process, async jobs, callbacks, idempotency, captions, limits and error codes.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#06081a">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%232563eb'/><stop offset='.6' stop-color='%237c3aed'/><stop offset='1' stop-color='%23f7b267'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><path d='M28 30h44v10H28zM28 45h30v10H28zM28 60h44v10H28z' fill='white'/></svg>">
+<style>
+:root{--bg:#06081a;--ink:#eef0fa;--ink-2:#b4b9d6;--ink-3:#7d84a8;--blue-soft:#6e9bff;--violet-soft:#a98bff;--amber:#f7b267;--amber-deep:#e9862f;--green:#7ee2a8;--red:#ff8f8f;
+  --glass:rgba(255,255,255,.045);--glass-2:rgba(255,255,255,.07);--edge:rgba(255,255,255,.10);--edge-2:rgba(255,255,255,.18);--code:rgba(3,5,16,.72);--r:14px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+::selection{background:rgba(247,178,103,.35)}
+.field{position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(60vw 60vw at 15% 5%,rgba(47,107,255,.30),transparent 60%),radial-gradient(55vw 55vw at 85% 30%,rgba(124,58,237,.26),transparent 62%),radial-gradient(70vw 50vw at 50% 110%,rgba(233,134,47,.18),transparent 60%),linear-gradient(180deg,#070b22 0%,#0a0c2a 30%,#150d33 62%,#26123a 85%,#3a1a33 100%)}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.35;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E")}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(16px,4vw,40px);width:100%}
+header{position:sticky;top:0;z-index:10;backdrop-filter:blur(14px) saturate(1.3);-webkit-backdrop-filter:blur(14px) saturate(1.3);background:linear-gradient(180deg,rgba(6,8,26,.82),rgba(6,8,26,.5));border-bottom:1px solid var(--edge)}
+nav.top{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{font-weight:650;letter-spacing:-.01em;display:flex;align-items:center;gap:10px;font-size:17px;white-space:nowrap}
+.brand i{display:inline-block;width:24px;height:24px;border-radius:8px;background:linear-gradient(135deg,#2f6bff 0%,#7c3aed 55%,var(--amber) 120%);box-shadow:0 0 22px rgba(124,58,237,.55)}
+.brand small{font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);border:1px solid rgba(247,178,103,.35);border-radius:999px;padding:4px 8px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;font-weight:600;font-size:14px;color:var(--ink);background:var(--glass);border:1px solid var(--edge-2);backdrop-filter:blur(10px);transition:background .3s;white-space:nowrap}
+.btn:hover{background:var(--glass-2)}
+.btn.primary{border-color:transparent;color:#1a0f05;background:linear-gradient(135deg,#ffd9a8 0%,var(--amber) 45%,var(--amber-deep) 100%)}
+.actions{display:flex;gap:10px}
+@media(max-width:560px){.actions .btn:not(.primary){display:none}}
+
+/* layout: sticky table of contents + article */
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:clamp(28px,5vw,64px);padding:clamp(40px,6vw,72px) 0}
+@media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr)}}
+.toc{position:sticky;top:96px;align-self:start;max-height:calc(100vh - 120px);overflow:auto;font-size:14px}
+.toc p{font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin:18px 0 8px}
+.toc p:first-child{margin-top:0}
+.toc ul{list-style:none;margin:0;padding:0}
+.toc a{display:block;padding:5px 0 5px 12px;color:var(--ink-2);border-left:1px solid var(--edge);transition:color .2s,border-color .2s}
+.toc a:hover{color:var(--ink)}
+.toc a.on{color:#ffd9a8;border-left-color:var(--amber)}
+@media(max-width:900px){.toc{position:static;max-height:none;border:1px solid var(--edge);border-radius:var(--r);background:var(--glass);padding:16px 18px}
+  .toc details summary{cursor:pointer;font-weight:600}.toc details[open] summary{margin-bottom:6px}}
+@media(min-width:901px){.toc details>summary{display:none}}
+
+article{min-width:0;max-width:820px}
+.kicker{font:600 12px/1 ui-monospace,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin:0 0 16px;display:flex;align-items:center;gap:12px}
+.kicker::before{content:"";width:28px;height:1px;background:linear-gradient(90deg,var(--amber),transparent)}
+h1{font-size:clamp(34px,4.6vw,54px);line-height:1.02;letter-spacing:-.035em;font-weight:650;margin:0 0 20px}
+h2{font-size:clamp(24px,2.6vw,30px);letter-spacing:-.025em;font-weight:650;margin:0 0 12px;line-height:1.15}
+h3{font-size:18px;letter-spacing:-.01em;font-weight:650;margin:32px 0 10px}
+section{padding:56px 0 8px;border-top:1px solid var(--edge);margin-top:48px;scroll-margin-top:72px}
+section:first-of-type{border-top:0;margin-top:0;padding-top:0}
+p,li{color:var(--ink-2)}p{margin:0 0 16px}strong{color:var(--ink)}
+ul,ol{padding-left:20px;margin:0 0 16px}li{margin:0 0 8px}
+.lead{font-size:clamp(17px,1.4vw,19px);max-width:680px}
+article a{color:var(--amber);border-bottom:1px solid rgba(247,178,103,.35)}article a:hover{border-color:var(--amber)}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:rgba(255,255,255,.07);border:1px solid var(--edge);border-radius:6px;padding:1px 6px;color:var(--ink);overflow-wrap:anywhere}
+.codebox{position:relative;margin:0 0 20px}
+pre{margin:0;background:var(--code);border:1px solid var(--edge);border-radius:var(--r);padding:34px 20px 18px;overflow-x:auto;font:13.5px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;color:#dfe3f7;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+pre code{background:none;border:0;padding:0;font-size:inherit;overflow-wrap:normal}
+.codebox .label{position:absolute;left:18px;top:11px;font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.copy{position:absolute;right:10px;top:8px;font:600 11px/1 ui-monospace,Menlo,monospace;letter-spacing:.06em;color:var(--ink-3);background:var(--glass);border:1px solid var(--edge);border-radius:8px;padding:5px 8px;cursor:pointer}
+.copy:hover{color:var(--ink);border-color:var(--edge-2)}
+.k{color:var(--blue-soft)}.s{color:#ffd9a8}.t{color:var(--violet-soft)}.c{color:var(--ink-3)}
+
+.endpoint{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 18px;padding:12px 16px;border:1px solid var(--edge);border-radius:var(--r);background:var(--glass);font:14px/1.3 ui-monospace,Menlo,monospace}
+.verb{font-weight:700;font-size:12px;letter-spacing:.06em;padding:4px 8px;border-radius:6px;color:#1a0f05}
+.verb.post{background:linear-gradient(135deg,#ffd9a8,var(--amber))}
+.verb.get{background:var(--green)}
+.endpoint span.note{color:var(--ink-3);font-family:ui-sans-serif,system-ui,sans-serif;font-size:13px}
+
+.tbl{overflow-x:auto;margin:0 0 20px;border:1px solid var(--edge);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:520px}
+th,td{text-align:left;vertical-align:top;padding:10px 14px;border-bottom:1px solid var(--edge)}
+tr:last-child td{border-bottom:0}
+th{font:600 11px/1.2 ui-monospace,Menlo,monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);background:rgba(255,255,255,.03)}
+td{color:var(--ink-2)}
+td:first-child{white-space:nowrap}
+td code{white-space:nowrap}
+.req{font:600 10px/1 ui-monospace,Menlo,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-left:6px}
+
+.note-box{border:1px solid rgba(247,178,103,.3);background:linear-gradient(160deg,rgba(247,178,103,.08),rgba(255,255,255,.02));border-radius:var(--r);padding:14px 18px;margin:0 0 20px}
+.note-box p:last-child{margin:0}
+.note-box.info{border-color:rgba(110,155,255,.3);background:linear-gradient(160deg,rgba(110,155,255,.08),rgba(255,255,255,.02))}
+
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}
+.tabs button{font:600 12px/1 ui-monospace,Menlo,monospace;color:var(--ink-2);background:transparent;border:1px solid var(--edge);border-radius:999px;padding:7px 12px;cursor:pointer}
+.tabs button[aria-selected="true"]{color:#1a0f05;background:linear-gradient(135deg,#ffd9a8,var(--amber));border-color:transparent}
+.panel[hidden]{display:none}
+
+.flow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 20px;font:13px/1 ui-monospace,Menlo,monospace}
+.flow span{padding:7px 10px;border-radius:8px;border:1px solid var(--edge-2);background:var(--glass)}
+.flow i{font-style:normal;color:var(--ink-3)}
+.flow .ok{border-color:rgba(126,226,168,.5);color:var(--green)}
+.flow .bad{border-color:rgba(255,143,143,.45);color:var(--red)}
+
+footer{padding:36px 0;color:var(--ink-3);font-size:14px;border-top:1px solid var(--edge);backdrop-filter:blur(8px)}
+footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}footer a:hover{color:var(--ink)}
+.check{color:var(--green);font-weight:700;text-shadow:0 0 10px rgba(126,226,168,.8)}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="field" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<header><div class="wrap"><nav class="top">
+  <a class="brand" href="index.html"><i></i>Brand-Pipe <small>Docs</small></a>
+  <div class="actions">
+    <a class="btn" href="index.html">← Website</a>
+    <a class="btn primary" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Get a free key</a>
+  </div>
+</nav></div></header>
+
+<main class="wrap"><div class="layout">
+<aside class="toc" aria-label="Contents"><details><summary>Contents</summary>
+  <p>Getting started</p>
+  <ul>
+    <li><a href="#quickstart">Quickstart</a></li>
+    <li><a href="#auth">Authentication</a></li>
+    <li><a href="#envelope">Response envelope</a></li>
+  </ul>
+  <p>Endpoints</p>
+  <ul>
+    <li><a href="#process">POST /v1/process</a></li>
+    <li><a href="#jobs">POST /v1/jobs</a></li>
+    <li><a href="#job-status">GET /v1/jobs/{id}</a></li>
+  </ul>
+  <p>Guides</p>
+  <ul>
+    <li><a href="#callbacks">Callbacks</a></li>
+    <li><a href="#idempotency">Idempotency &amp; retries</a></li>
+    <li><a href="#captions">Burned-in captions</a></li>
+    <li><a href="#n8n">n8n</a></li>
+    <li><a href="#examples">Code examples</a></li>
+  </ul>
+  <p>Reference</p>
+  <ul>
+    <li><a href="#limits">Limits</a></li>
+    <li><a href="#credits">Credits &amp; refunds</a></li>
+    <li><a href="#errors">Errors</a></li>
+  </ul>
+</details></aside>
+
+<article>
+
+<section id="quickstart">
+<p class="kicker">Developer documentation</p>
+<h1>Brand-Pipe API</h1>
+<p class="lead">One HTTPS call turns a raw clip into a platform-ready video: fitted to 9:16, 1:1 or 16:9, with your logo, loudness normalised to −14 LUFS, optionally with burned-in captions. This page is the complete reference.</p>
+
+<div class="endpoint"><span>Base URL</span><code>https://api.brand-pipe.com</code></div>
+
+<h3>1. Get a key</h3>
+<p><a href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Check out the free tier</a> (25 credits, no card). After checkout you accept the terms and your key is shown <strong>once</strong>. Keys start with <code>bp_</code>. Store it in a secret manager or your automation tool's credential store.</p>
+
+<h3>2. Process a clip</h3>
+<div class="codebox"><span class="label">curl</span><pre><code>curl -X POST https://api.brand-pipe.com/v1/process \
+  -H <span class="s">"X-API-Key: $BRAND_PIPE_KEY"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d '{
+    <span class="k">"video_url"</span>: <span class="s">"https://example.com/raw.mp4"</span>,
+    <span class="k">"logo_url"</span>: <span class="s">"https://example.com/logo.png"</span>,
+    <span class="k">"format"</span>: <span class="s">"vertical"</span>
+  }'</code></pre></div>
+
+<h3>3. Download the result</h3>
+<div class="codebox"><span class="label">200 OK</span><pre><code>{
+  <span class="k">"success"</span>: <span class="t">true</span>,
+  <span class="k">"data"</span>: {
+    <span class="k">"job_id"</span>: <span class="s">"6bbee170c2a54f0b9c1e…"</span>,
+    <span class="k">"result_url"</span>: <span class="s">"https://…/6bbee170….mp4?X-Amz-Signature=…"</span>,
+    <span class="k">"duration_s"</span>: <span class="t">10.0</span>,
+    <span class="k">"had_audio"</span>: <span class="t">true</span>,
+    <span class="k">"format"</span>: <span class="s">"vertical"</span>,
+    <span class="k">"video_reencoded"</span>: <span class="t">true</span>,
+    <span class="k">"source_color_warning"</span>: <span class="t">null</span>,
+    <span class="k">"audio_normalized"</span>: <span class="t">true</span>,
+    <span class="k">"audio_skip_reason"</span>: <span class="t">null</span>
+  },
+  <span class="k">"error"</span>: <span class="t">null</span>
+}</code></pre></div>
+<p><code>result_url</code> is a signed link, valid for <strong>one hour</strong>. The file itself is deleted after 24 hours, so download it or hand it straight to your upload step.</p>
+</section>
+
+<section id="auth">
+<h2>Authentication</h2>
+<p>Send your key in the <code>X-API-Key</code> header on every request.</p>
+<div class="codebox"><span class="label">header</span><pre><code>X-API-Key: bp_your_key</code></pre></div>
+<div class="note-box"><p><strong>Do not use <code>Authorization: Bearer</code>.</strong> The hosting platform in front of the API reads Bearer tokens as its own identity tokens and rejects the request with 401 before Brand-Pipe sees it.</p></div>
+<ul>
+  <li><strong>Missing or invalid key</strong> → <code>401</code>.</li>
+  <li><strong>Key has no credits left</strong> → <code>402</code>. Buy a top-up with the same email; the credits land on the key you already have.</li>
+  <li><strong>Rate limit</strong>: 300 requests per minute per key, status polls included → <code>429</code>. Back off and retry.</li>
+  <li><strong>Lost key</strong>: keys are not stored in plaintext. Email <a href="mailto:support@brand-pipe.com">support@brand-pipe.com</a> and you get a new key with your remaining credits.</li>
+</ul>
+</section>
+
+<section id="envelope">
+<h2>Response envelope</h2>
+<p>Every response, including errors and unexpected failures, is JSON with the same three fields. Branch on <code>success</code>, not only on the HTTP status.</p>
+<div class="tbl"><table>
+<thead><tr><th>Field</th><th>Type</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>success</code></td><td>boolean</td><td><code>true</code> when the request did what it was asked to.</td></tr>
+<tr><td><code>data</code></td><td>object | null</td><td>The payload. On some errors it carries extra context, such as <code>credits_refunded</code> or a <code>status_url</code>.</td></tr>
+<tr><td><code>error</code></td><td>string | null</td><td>A human-readable message that is safe to show or log. <code>null</code> on success.</td></tr>
+</tbody></table></div>
+<div class="codebox"><span class="label">402 Payment Required</span><pre><code>{ <span class="k">"success"</span>: <span class="t">false</span>, <span class="k">"data"</span>: <span class="t">null</span>, <span class="k">"error"</span>: <span class="s">"No credits left on this API key."</span> }</code></pre></div>
+</section>
+
+<section id="process">
+<h2>Process a video (synchronous)</h2>
+<div class="endpoint"><span class="verb post">POST</span><code>/v1/process</code><span class="note">answers when the video is ready · up to 60 s output</span></div>
+<p>Downloads the source, renders it and answers with the result in the same request, typically within seconds. Use it for short clips. For anything longer, or for clients with short timeouts, use <a href="#jobs"><code>POST /v1/jobs</code></a>.</p>
+
+<h3>Headers</h3>
+<div class="tbl"><table>
+<thead><tr><th>Header</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>X-API-Key</code><span class="req">required</span></td><td>Your API key.</td></tr>
+<tr><td><code>Content-Type</code><span class="req">required</span></td><td><code>application/json</code></td></tr>
+<tr><td><code>Idempotency-Key</code></td><td>Optional, 1–255 printable characters. Makes retries safe. See <a href="#idempotency">Idempotency</a>.</td></tr>
+</tbody></table></div>
+
+<h3 id="request-body">Request body</h3>
+<div class="tbl"><table>
+<thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>video_url</code><span class="req">required</span></td><td>URL</td><td>—</td><td>Public http(s) URL of the source video. Anything ffmpeg can read: MP4, MOV, WebM, MKV with H.264, HEVC, VP9, AV1 and more. Max 200 MB.</td></tr>
+<tr><td><code>format</code></td><td>string</td><td><code>vertical</code></td><td><code>vertical</code> 1080×1920 (Shorts, TikTok, Reels) · <code>square</code> 1080×1080 · <code>landscape</code> 1920×1080. The source is fitted inside the frame without cropping.</td></tr>
+<tr><td><code>background</code></td><td>string</td><td><code>black</code></td><td>What fills the frame where the source does not reach: <code>black</code> bars or a <code>blur</code>red, enlarged copy of the video.</td></tr>
+<tr><td><code>logo_url</code></td><td>URL</td><td><code>null</code></td><td>PNG with transparency. Scaled to 15 % of the output width and placed 20 px from the bottom-right corner.</td></tr>
+<tr><td><code>audio_normalize</code></td><td>boolean</td><td><code>true</code></td><td>Normalise loudness to −14 LUFS integrated, −1 dBTP true peak. Near-silent sources (below −50 LUFS) are left as they are instead of being amplified into hiss.</td></tr>
+<tr><td><code>start_s</code></td><td>number ≥ 0</td><td><code>0</code></td><td>Where the output window starts in the source, in seconds. Snaps to the nearest keyframe, so the cut is accurate to a second or two.</td></tr>
+<tr><td><code>duration_s</code></td><td>number &gt; 0</td><td>rest of source</td><td>Length of the output window. The duration limit applies to this window, not to the whole source, so you can cut a clip out of a long recording.</td></tr>
+<tr><td><code>subtitles</code></td><td>string</td><td><code>null</code></td><td>SRT or WebVTT text, UTF-8, max 512 KB. Burned into the picture. +1 credit. See <a href="#captions">Captions</a>.</td></tr>
+<tr><td><code>subtitles_url</code></td><td>URL</td><td><code>null</code></td><td>Same, fetched from a public URL. Send either <code>subtitles</code> or <code>subtitles_url</code>, not both.</td></tr>
+</tbody></table></div>
+<p>All URLs must point to public hosts. Private, loopback, link-local and cloud metadata addresses are rejected with <code>400</code>, including when a redirect leads there.</p>
+
+<h3>Response <code>data</code></h3>
+<div class="tbl"><table>
+<thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>job_id</code></td><td>string</td><td>Identifier of this render. With an <code>Idempotency-Key</code> it can also be read on <code>GET /v1/jobs/{job_id}</code>.</td></tr>
+<tr><td><code>result_url</code></td><td>string</td><td>Signed download URL for the MP4 (H.264, AAC, fast start). Valid for 1 hour; the file is kept for 24 hours.</td></tr>
+<tr><td><code>duration_s</code></td><td>number</td><td>Duration of the output in seconds.</td></tr>
+<tr><td><code>had_audio</code></td><td>boolean</td><td>Whether the source had an audio stream.</td></tr>
+<tr><td><code>format</code></td><td>string</td><td>The preset that was rendered.</td></tr>
+<tr><td><code>video_reencoded</code></td><td>boolean</td><td><code>false</code> when the source already matched the preset (same resolution, H.264, 8-bit 4:2:0, no logo, no captions). The picture is then copied losslessly and only the audio is processed.</td></tr>
+<tr><td><code>source_color_warning</code></td><td>string | null</td><td>Set when the source's colour tags contradict themselves, for example an SD colour matrix on HD material. Reported only, never corrected.</td></tr>
+<tr><td><code>audio_normalized</code></td><td>boolean</td><td>Whether loudness normalisation ran.</td></tr>
+<tr><td><code>audio_skip_reason</code></td><td>string | null</td><td>Why it did not: <code>not requested</code>, <code>source has no audio stream</code>, or a note that the source measured as silent.</td></tr>
+</tbody></table></div>
+
+<div class="note-box info"><p><strong>Too big for the synchronous endpoint?</strong> Before any work starts, the API estimates the encode time. A source that would not finish in time (roughly: more than ~58 s of 1080p30, ~28 s of 1080p60, ~22 s of 4K60) is refused with <code>413</code> and a message that names <code>POST /v1/jobs</code>. Nothing is charged.</p></div>
+</section>
+
+<section id="jobs">
+<h2>Submit an async job</h2>
+<div class="endpoint"><span class="verb post">POST</span><code>/v1/jobs</code><span class="note">answers 202 immediately · up to 10 min output</span></div>
+<p>Takes the <a href="#request-body">same body</a> as <code>/v1/process</code>, plus an optional <code>callback_url</code>. It answers in well under a second and renders in the background. The credit is charged when the job is accepted and refunded if it fails.</p>
+<div class="tbl"><table>
+<thead><tr><th>Extra field</th><th>Type</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>callback_url</code></td><td>URL</td><td>Optional. When the job finishes, its status is POSTed here. See <a href="#callbacks">Callbacks</a>.</td></tr>
+</tbody></table></div>
+<div class="codebox"><span class="label">curl</span><pre><code>curl -X POST https://api.brand-pipe.com/v1/jobs \
+  -H <span class="s">"X-API-Key: $BRAND_PIPE_KEY"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -H <span class="s">"Idempotency-Key: upload-2026-09-16-001"</span> \
+  -d '{
+    <span class="k">"video_url"</span>: <span class="s">"https://example.com/long-recording.mp4"</span>,
+    <span class="k">"start_s"</span>: <span class="t">30</span>,
+    <span class="k">"duration_s"</span>: <span class="t">240</span>,
+    <span class="k">"background"</span>: <span class="s">"blur"</span>,
+    <span class="k">"callback_url"</span>: <span class="s">"https://hooks.example.com/brand-pipe"</span>
+  }'</code></pre></div>
+<div class="codebox"><span class="label">202 Accepted</span><pre><code>{
+  <span class="k">"success"</span>: <span class="t">true</span>,
+  <span class="k">"data"</span>: {
+    <span class="k">"job_id"</span>: <span class="s">"3f9c1a…"</span>,
+    <span class="k">"status"</span>: <span class="s">"queued"</span>,
+    <span class="k">"status_url"</span>: <span class="s">"https://api.brand-pipe.com/v1/jobs/3f9c1a…"</span>
+  },
+  <span class="k">"error"</span>: <span class="t">null</span>
+}</code></pre></div>
+<p>Jobs are never dropped under load. They wait in a queue and start as capacity frees up.</p>
+</section>
+
+<section id="job-status">
+<h2>Get job status</h2>
+<div class="endpoint"><span class="verb get">GET</span><code>/v1/jobs/{job_id}</code><span class="note">free · does not use credits</span></div>
+<div class="flow" aria-label="Job lifecycle"><span>queued</span><i>→</i><span>running</span><i>→</i><span class="ok">done</span><i>or</i><span class="bad">failed</span></div>
+<p>Polling costs nothing, but it counts toward the rate limit. An interval of 5–10 seconds is plenty. Only the key that submitted a job can read it; any other key gets <code>404</code>. Each poll signs a <strong>fresh</strong> <code>result_url</code>, so a workflow that comes back hours later still gets a working link, as long as that is within 24 hours.</p>
+<div class="codebox"><span class="label">200 OK · done</span><pre><code>{
+  <span class="k">"success"</span>: <span class="t">true</span>,
+  <span class="k">"data"</span>: {
+    <span class="k">"job_id"</span>: <span class="s">"3f9c1a…"</span>,
+    <span class="k">"status"</span>: <span class="s">"done"</span>,
+    <span class="k">"result_url"</span>: <span class="s">"https://…signed…"</span>,
+    <span class="k">"duration_s"</span>: <span class="t">240.0</span>,
+    <span class="k">"had_audio"</span>: <span class="t">true</span>,
+    <span class="k">"format"</span>: <span class="s">"vertical"</span>,
+    <span class="k">"video_reencoded"</span>: <span class="t">true</span>,
+    <span class="k">"source_color_warning"</span>: <span class="t">null</span>,
+    <span class="k">"audio_normalized"</span>: <span class="t">true</span>,
+    <span class="k">"audio_skip_reason"</span>: <span class="t">null</span>,
+    <span class="k">"error"</span>: <span class="t">null</span>,
+    <span class="k">"credits_refunded"</span>: <span class="t">false</span>,
+    <span class="k">"callback_delivered"</span>: <span class="t">true</span>
+  },
+  <span class="k">"error"</span>: <span class="t">null</span>
+}</code></pre></div>
+<p>A <code>failed</code> job has <code>result_url: null</code>, the same public message in <code>data.error</code> that the synchronous endpoint would have returned, and <code>credits_refunded: true</code>. The request itself still answers <code>200</code> with <code>success: true</code>, because the status was read successfully. Check <code>data.status</code>.</p>
+</section>
+
+<section id="callbacks">
+<h2>Callbacks</h2>
+<p>Pass <code>callback_url</code> to <code>POST /v1/jobs</code> and you do not have to poll. When the job reaches <code>done</code> or <code>failed</code>, Brand-Pipe POSTs the job status to that URL: the same object as <code>data</code> in <a href="#job-status"><code>GET /v1/jobs/{id}</code></a>, without the envelope.</p>
+<ul>
+  <li><code>Content-Type: application/json</code>, <code>User-Agent: BrandPipe/…</code>.</li>
+  <li>Any 2xx counts as delivered. A network error or 5xx is retried <strong>once</strong> after 2 seconds; a 4xx is final. Redirects are not followed.</li>
+  <li>The URL must be public, and it is checked again at delivery time.</li>
+  <li>The outcome is recorded as <code>callback_delivered</code> on the job, so polling remains a fallback if your endpoint was down.</li>
+</ul>
+<div class="note-box"><p><strong>Callbacks are notifications, not authenticated messages.</strong> Anyone who knows your callback URL could post to it. If the result matters, read <code>status_url</code> with your own key before acting on it.</p></div>
+</section>
+
+<section id="idempotency">
+<h2>Idempotency &amp; retries</h2>
+<p>Networks drop responses, and automation tools retry. Send an <code>Idempotency-Key</code> header on either POST endpoint and a repeat of the same request returns the first result instead of rendering and charging again. Keys belong to your API key and are remembered for 24 hours.</p>
+<div class="tbl"><table>
+<thead><tr><th>If the first request with this key…</th><th>the repeat gets</th></tr></thead>
+<tbody>
+<tr><td>finished</td><td>The same result (sync: <code>200</code> with the stored <code>data</code> and a freshly signed URL; async: <code>202</code> with the job's current status), plus the header <code>Idempotent-Replayed: true</code>. No credit.</td></tr>
+<tr><td>is still running (sync)</td><td><code>409</code> with <code>data.status_url</code>. Poll it or retry later. No second render is started.</td></tr>
+<tr><td>is queued or running (async)</td><td><code>202</code> with the same <code>job_id</code> and its current status.</td></tr>
+<tr><td>failed</td><td>A fresh attempt. The failed one was refunded, so the net cost is one charge.</td></tr>
+<tr><td>was rejected before charging (401, 402, 422…)</td><td>Nothing was stored; the repeat is a normal new request.</td></tr>
+<tr><td>had a different body</td><td><code>409</code>: a key names one request, not a whole workflow.</td></tr>
+</tbody></table></div>
+<p>Use a value that is unique per item. In n8n that is <code>{{ $execution.id }}-{{ $itemIndex }}</code>. The execution id alone gives every item of a multi-item run the same key, and only the first item would be rendered.</p>
+<p>The guarantee covers retries, which always arrive after the first attempt has ended. Two identical requests sent at the same moment can both run.</p>
+</section>
+
+<section id="captions">
+<h2>Burned-in captions</h2>
+<p>Send an SRT or WebVTT file you already have, such as the output of your transcription step, and it is rendered into the picture. Brand-Pipe does not transcribe.</p>
+<div class="codebox"><span class="label">request body</span><pre><code>{
+  <span class="k">"video_url"</span>: <span class="s">"https://example.com/raw.mp4"</span>,
+  <span class="k">"subtitles"</span>: <span class="s">"1\n00:00:00,500 --> 00:00:02,800\nThree tips for better Shorts\n"</span>
+}</code></pre></div>
+<div class="tbl"><table>
+<tbody>
+<tr><td>Formats</td><td>SRT and WebVTT, inline (<code>subtitles</code>) or by URL (<code>subtitles_url</code>). <strong>UTF-8 only.</strong></td></tr>
+<tr><td>Style</td><td>One style: white, bold, heavy black outline, centred above the area where TikTok and Shorts draw their own buttons. Scales with the output, so every format looks the same. Not configurable yet.</td></tr>
+<tr><td>Markup</td><td><code>&lt;i&gt;</code>, <code>&lt;b&gt;</code>, <code>&lt;v Speaker&gt;</code> and inline timestamps are removed; HTML entities are resolved. Captions cannot restyle or reposition themselves.</td></tr>
+<tr><td>Timing</td><td>Cue times refer to the <strong>source</strong>. With <code>start_s</code>/<code>duration_s</code> they are shifted onto the output window, and cues outside it are dropped.</td></tr>
+<tr><td>Limits</td><td>512 KB, 2,000 cues, 500 characters per cue, at most 8 cues on screen at once. A broken cue is skipped; a file with no usable cue is a <code>422</code>.</td></tr>
+<tr><td>Cost</td><td>+1 credit, so a captioned video costs 2. Captions always re-encode the picture.</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="n8n">
+<h2>n8n</h2>
+<p>Two ready-made workflows are available on the <a href="index.html#n8n">website</a>: <a href="n8n-brand-pipe.json" download>n8n-brand-pipe.json</a> (process and download) and <a href="n8n-brand-pipe-youtube.json" download>n8n-brand-pipe-youtube.json</a> (schedule, generate, process, upload to YouTube).</p>
+<ol>
+  <li>Create a <em>Header Auth</em> credential named <strong>Brand-Pipe API Key</strong> with header name <code>X-API-Key</code> and your key as the value.</li>
+  <li>In the HTTP Request node, add the header <code>Idempotency-Key</code> = <code>{{ $execution.id }}-{{ $itemIndex }}</code> and enable <em>Retry On Fail</em>.</li>
+  <li>For long clips, use <code>POST /v1/jobs</code> and follow it with a <strong>Wait</strong> node set to <em>Resume: On Webhook Call</em>, HTTP method <strong>POST</strong>. Send <code>{{ $execution.resumeUrl }}</code> as <code>callback_url</code>, and set <em>Limit Wait Time</em> so the execution cannot hang forever.</li>
+</ol>
+</section>
+
+<section id="examples">
+<h2>Code examples</h2>
+<p>Submit an async job and poll until it is finished.</p>
+<div class="tabs" role="tablist" aria-label="Language">
+  <button role="tab" aria-selected="true" aria-controls="ex-py" id="tab-py">Python</button>
+  <button role="tab" aria-selected="false" aria-controls="ex-js" id="tab-js">JavaScript</button>
+  <button role="tab" aria-selected="false" aria-controls="ex-sh" id="tab-sh">Shell</button>
+</div>
+<div class="panel" id="ex-py" role="tabpanel" aria-labelledby="tab-py"><div class="codebox"><span class="label">python · httpx</span><pre><code><span class="k">import</span> os, time, httpx
+
+API = <span class="s">"https://api.brand-pipe.com"</span>
+HEADERS = {<span class="s">"X-API-Key"</span>: os.environ[<span class="s">"BRAND_PIPE_KEY"</span>]}
+
+<span class="k">def</span> <span class="t">render</span>(video_url: str, idempotency_key: str) -> str:
+    r = httpx.post(f<span class="s">"{API}/v1/jobs"</span>, headers={**HEADERS, <span class="s">"Idempotency-Key"</span>: idempotency_key},
+                   json={<span class="s">"video_url"</span>: video_url, <span class="s">"format"</span>: <span class="s">"vertical"</span>}, timeout=30)
+    body = r.json()
+    <span class="k">if not</span> body[<span class="s">"success"</span>]:
+        <span class="k">raise</span> RuntimeError(f<span class="s">"{r.status_code}: {body['error']}"</span>)
+    status_url = body[<span class="s">"data"</span>][<span class="s">"status_url"</span>]
+
+    <span class="k">while True</span>:
+        job = httpx.get(status_url, headers=HEADERS, timeout=30).json()[<span class="s">"data"</span>]
+        <span class="k">if</span> job[<span class="s">"status"</span>] == <span class="s">"done"</span>:
+            <span class="k">return</span> job[<span class="s">"result_url"</span>]
+        <span class="k">if</span> job[<span class="s">"status"</span>] == <span class="s">"failed"</span>:
+            <span class="k">raise</span> RuntimeError(job[<span class="s">"error"</span>])
+        time.sleep(<span class="t">5</span>)</code></pre></div></div>
+<div class="panel" id="ex-js" role="tabpanel" aria-labelledby="tab-js" hidden><div class="codebox"><span class="label">node 18+ · fetch</span><pre><code><span class="k">const</span> API = <span class="s">"https://api.brand-pipe.com"</span>;
+<span class="k">const</span> headers = { <span class="s">"X-API-Key"</span>: process.env.BRAND_PIPE_KEY, <span class="s">"Content-Type"</span>: <span class="s">"application/json"</span> };
+<span class="k">const</span> sleep = (ms) => <span class="k">new</span> Promise((r) => setTimeout(r, ms));
+
+<span class="k">export async function</span> <span class="t">render</span>(videoUrl, idempotencyKey) {
+  <span class="k">const</span> res = <span class="k">await</span> fetch(`${API}/v1/jobs`, {
+    method: <span class="s">"POST"</span>,
+    headers: { ...headers, <span class="s">"Idempotency-Key"</span>: idempotencyKey },
+    body: JSON.stringify({ video_url: videoUrl, format: <span class="s">"vertical"</span> }),
+  });
+  <span class="k">const</span> body = <span class="k">await</span> res.json();
+  <span class="k">if</span> (!body.success) <span class="k">throw new</span> Error(`${res.status}: ${body.error}`);
+
+  <span class="k">for</span> (;;) {
+    <span class="k">const</span> { data: job } = <span class="k">await</span> (<span class="k">await</span> fetch(body.data.status_url, { headers })).json();
+    <span class="k">if</span> (job.status === <span class="s">"done"</span>) <span class="k">return</span> job.result_url;
+    <span class="k">if</span> (job.status === <span class="s">"failed"</span>) <span class="k">throw new</span> Error(job.error);
+    <span class="k">await</span> sleep(<span class="t">5000</span>);
+  }
+}</code></pre></div></div>
+<div class="panel" id="ex-sh" role="tabpanel" aria-labelledby="tab-sh" hidden><div class="codebox"><span class="label">bash · curl + jq</span><pre><code>API=https://api.brand-pipe.com
+STATUS_URL=$(curl -s -X POST $API/v1/jobs \
+  -H <span class="s">"X-API-Key: $BRAND_PIPE_KEY"</span> -H <span class="s">'Content-Type: application/json'</span> \
+  -d <span class="s">'{"video_url":"https://example.com/raw.mp4","format":"vertical"}'</span> | jq -r .data.status_url)
+
+<span class="k">while</span> :; <span class="k">do</span>
+  JOB=$(curl -s <span class="s">"$STATUS_URL"</span> -H <span class="s">"X-API-Key: $BRAND_PIPE_KEY"</span>)
+  STATUS=$(echo <span class="s">"$JOB"</span> | jq -r .data.status)
+  [ <span class="s">"$STATUS"</span> = done ] && { echo <span class="s">"$JOB"</span> | jq -r .data.result_url; <span class="k">break</span>; }
+  [ <span class="s">"$STATUS"</span> = failed ] && { echo <span class="s">"$JOB"</span> | jq -r .data.error >&2; exit 1; }
+  sleep 5
+<span class="k">done</span></code></pre></div></div>
+</section>
+
+<section id="limits">
+<h2>Limits</h2>
+<div class="tbl"><table>
+<thead><tr><th></th><th><code>POST /v1/process</code></th><th><code>POST /v1/jobs</code></th></tr></thead>
+<tbody>
+<tr><td>Output length</td><td>60 s, and the encode-time estimate (see above)</td><td>600 s (10 min)</td></tr>
+<tr><td>Source file</td><td>200 MB, public http(s) URL</td><td>same</td></tr>
+<tr><td>Response</td><td>when the video is ready</td><td><code>202</code> immediately</td></tr>
+<tr><td>Rate limit</td><td>300 requests/min per key</td><td>same, status polls included</td></tr>
+<tr><td>Download link</td><td>1 hour</td><td>1 hour per signing, re-signed on every poll</td></tr>
+<tr><td>Retention</td><td>result 24 h</td><td>result, job status and idempotency keys 24 h</td></tr>
+</tbody></table></div>
+<p>Processing runs in Frankfurt (Google Cloud); results are stored on Cloudflare R2 in the EU jurisdiction.</p>
+</section>
+
+<section id="credits">
+<h2>Credits &amp; refunds</h2>
+<ul>
+  <li><strong>1 credit</strong> per video, whatever its length. <strong>2 credits</strong> with captions.</li>
+  <li>Credits are charged when a request is accepted, and <strong>refunded automatically</strong> if the download, encode or upload fails afterwards. The error response then carries <code>data.credits_refunded: true</code>; failed jobs show the same field.</li>
+  <li>Requests rejected up front (invalid body, blocked URL, bad key, too large for the endpoint) are never charged.</li>
+  <li><strong>One exception:</strong> an encode that runs into the processing time limit keeps its credit (<code>credits_refunded: false</code>). The estimate refuses almost every such source before work starts; what remains is a source that is far denser than it declares.</li>
+  <li>Status polls and idempotent replays are free.</li>
+  <li>Credits never expire. Top-ups bought with the same email land on your existing key.</li>
+</ul>
+</section>
+
+<section id="errors">
+<h2>Errors</h2>
+<p>The <code>error</code> field carries the message shown here. Stack traces and internal details are never returned.</p>
+<div class="tbl"><table>
+<thead><tr><th>Status</th><th>Message / cause</th><th>What to do</th></tr></thead>
+<tbody>
+<tr><td><code>400</code></td><td>URL is not allowed (private host or non-http scheme) · malformed <code>Idempotency-Key</code></td><td>Use a public URL; key of 1–255 printable characters.</td></tr>
+<tr><td><code>401</code></td><td>Invalid or missing API key.</td><td>Check the <code>X-API-Key</code> header.</td></tr>
+<tr><td><code>402</code></td><td>No credits left on this API key.</td><td>Top up with the same email.</td></tr>
+<tr><td><code>404</code></td><td>Job not found. Also returned for jobs that belong to another key or have expired (kept at least 24 hours).</td><td>Check the job id and key.</td></tr>
+<tr><td><code>409</code></td><td>Idempotency key reused with a different body · first request with this key still in progress (<code>data.status_url</code>)</td><td>Use a new key per request; or poll the status URL.</td></tr>
+<tr><td><code>413</code></td><td>Source file larger than 200 MB · source needs more processing time than the endpoint allows</td><td>Use <code>POST /v1/jobs</code>, shorten with <code>start_s</code>/<code>duration_s</code>, or send a lower frame rate.</td></tr>
+<tr><td><code>422</code></td><td><code>Invalid request: &lt;fields&gt;</code> · not a readable video or too long · subtitles could not be read</td><td>Fix the named fields; check the file and duration.</td></tr>
+<tr><td><code>424</code></td><td>Could not download the source file.</td><td>Make sure the URL is reachable without login and returns the file.</td></tr>
+<tr><td><code>429</code></td><td>Rate limit exceeded for this API key.</td><td>Back off and retry, with an <code>Idempotency-Key</code>.</td></tr>
+<tr><td><code>500</code></td><td>Video processing failed · processing exceeded the time limit</td><td>Retry once; contact support if it persists.</td></tr>
+<tr><td><code>503</code></td><td>Authentication, result storage or the job queue is temporarily unavailable.</td><td>Retry after a short wait. Safe with an <code>Idempotency-Key</code>.</td></tr>
+</tbody></table></div>
+<div class="note-box info"><p><strong>A good default retry policy:</strong> retry <code>429</code>, <code>500</code> and <code>503</code> with exponential backoff and an <code>Idempotency-Key</code>. Do not retry other <code>4xx</code> errors unchanged.</p></div>
+<p>Questions or something not covered here? <a href="mailto:support@brand-pipe.com">support@brand-pipe.com</a></p>
+</section>
+
+</article>
+</div></main>
+
+<footer><div class="wrap"><div class="row">
+  <div>© 2026 Brand-Pipe · <a href="docs.html">Docs</a> · <a href="impressum.html">Impressum</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></div>
+  <div><a href="mailto:support@brand-pipe.com">Support</a> · Status: <span class="check">●</span> operational</div>
+</div></div></footer>
+
+<script>
+(function(){
+  // contents: open beside the article on wide screens, collapsed above it on phones
+  var toc=document.querySelector('.toc details'),wide=matchMedia('(min-width: 901px)');
+  function syncToc(){toc.open=wide.matches}syncToc();if(wide.addEventListener)wide.addEventListener('change',syncToc);
+  toc.querySelectorAll('a').forEach(function(a){a.addEventListener('click',function(){if(!wide.matches)toc.open=false})});
+  // copy buttons on code blocks
+  document.querySelectorAll('.codebox').forEach(function(box){
+    var pre=box.querySelector('pre');if(!pre||!navigator.clipboard)return;
+    var b=document.createElement('button');b.type='button';b.className='copy';b.textContent='Copy';
+    b.addEventListener('click',function(){
+      navigator.clipboard.writeText(pre.innerText).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1500)},function(){b.textContent='Failed'});
+    });
+    box.appendChild(b);
+  });
+  // language tabs
+  var tabs=document.querySelectorAll('.tabs [role=tab]');
+  tabs.forEach(function(tab){tab.addEventListener('click',function(){
+    tabs.forEach(function(t){var on=t===tab;t.setAttribute('aria-selected',on);document.getElementById(t.getAttribute('aria-controls')).hidden=!on});
+  })});
+  // table of contents: highlight the section in view
+  var links={};document.querySelectorAll('.toc a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a});
+  if(!('IntersectionObserver' in window))return;
+  var io=new IntersectionObserver(function(entries){entries.forEach(function(en){
+    if(en.isIntersecting&&links[en.target.id]){Object.keys(links).forEach(function(k){links[k].classList.remove('on')});links[en.target.id].classList.add('on')}
+  })},{rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('article section[id]').forEach(function(s){io.observe(s)});
+})();
+</script>
+</body>
+</html>

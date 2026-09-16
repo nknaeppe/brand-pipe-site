@@ -206,7 +206,7 @@ footer a:hover{color:var(--ink)}
 
 <header><div class="wrap"><nav>
   <a class="brand" href="#"><i></i>Brand-Pipe</a>
-  <ul><li><a href="#how">How it works</a></li><li><a href="#api">API</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#n8n">n8n templates</a></li><li><a href="#faq">FAQ</a></li></ul>
+  <ul><li><a href="#how">How it works</a></li><li><a href="#api">API</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#n8n">n8n templates</a></li><li><a href="#faq">FAQ</a></li><li><a href="docs.html">Docs</a></li></ul>
   <a class="btn primary" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Start free</a>
 </nav></div></header>
 
@@ -278,6 +278,7 @@ footer a:hover{color:var(--ink)}
     <div><h3>limits</h3><p>Up to 60 seconds per call on <code>/v1/process</code>, up to 10 minutes on <code>/v1/jobs</code>; 200 MB per source file. Public http(s) URLs only. Results are kept for 24 hours.</p></div>
     <div><h3>errors</h3><p>401 bad key · 402 no credits · 409 idempotency conflict · 413 too large · 422 unreadable video · 424 source download failed · 429 rate limited</p></div>
   </div>
+  <p class="lead rv" style="margin:20px 0 0">Every field, status code and retry rule is in the <a href="docs.html">developer documentation</a>.</p>
   <div class="two">
     <div class="card rv"><h3>Retries never pay twice</h3><p>Send <code>Idempotency-Key: {{ $execution.id }}-{{ $itemIndex }}</code> and a retried request — n8n's <em>Retry On Fail</em>, a lost response, a timeout — gets the first result back instead of a second charge and a second render. Keys are remembered for 24 hours.</p></div>
     <div class="card rv"><h3>Long clips: submit, then get called back</h3><p><code>POST /v1/jobs</code> takes the same body plus an optional <code>callback_url</code>, answers at once with a <code>status_url</code>, and posts the finished job to your URL — an n8n <em>Wait</em> node resumes on it. Polling the status URL is free and always works too.</p></div>
@@ -334,13 +335,13 @@ footer a:hover{color:var(--ink)}
   <p class="rv">25 free credits, no card, the key shown right after checkout.</p>
   <div class="cta rv" style="justify-content:center">
     <a class="btn primary" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Get 25 free credits</a>
-    <a class="btn" href="#api">Read the API</a>
+    <a class="btn" href="docs.html">Read the docs</a>
   </div>
 </section>
 </main>
 
 <footer><div class="wrap"><div class="row">
-  <div>© 2026 Brand-Pipe · <a href="impressum.html">Impressum</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></div>
+  <div>© 2026 Brand-Pipe · <a href="docs.html">Docs</a> · <a href="impressum.html">Impressum</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></div>
   <div><a href="mailto:support@brand-pipe.com">Support</a> · Status: <span class="check">●</span> operational</div>
 </div></div></footer>
 
