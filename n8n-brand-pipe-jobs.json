@@ -1,0 +1,479 @@
+{
+  "name": "Long clips without polling: async Brand-Pipe job resumes an n8n Wait node via callback",
+  "nodes": [
+    {
+      "parameters": {
+        "content": "## How it works\nFor clips longer than 60 seconds. *Submit job* calls `POST /v1/jobs` with `callback_url` set to this execution's `{{ $execution.resumeUrl }}`. Brand-Pipe renders in the background, then POSTs the job status to that URL and *Wait for callback* resumes with it under `$json.body`. No polling loop, no open request.\n\nIf no callback arrives within 15 minutes, the lower branch reads the status URL and stops with a message that says whether the job finished and whether the callback was delivered.",
+        "height": 300,
+        "width": 380,
+        "color": 4
+      },
+      "id": "b2c3d4e5-1001-4000-8000-000000000101",
+      "name": "Sticky: 1",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Credential\nHeader Auth named `Brand-Pipe API Key`, header `X-API-Key`, your key as value. Select it on *Submit job* and *Poll status*.\n\nThe resume URL must be reachable from the internet. On n8n Cloud it is. On a local Docker n8n it is not, and the API refuses a private or localhost callback URL at submission, so the run stops in *Accepted?* with that message. Set `WEBHOOK_URL` to a public tunnel first.",
+        "height": 300,
+        "width": 380,
+        "color": 4
+      },
+      "id": "b2c3d4e5-1002-4000-8000-000000000102",
+      "name": "Sticky: 2",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Reading the result\n*Download result* fires only if the callback said `status: done`. A failed job stops with the API's error and refund flag.\n\nAdd `start_s` and `duration_s` to the Set node and the request body to cut a window out of a long source. `/v1/jobs` takes up to 10 minutes of output. Tested 2026-09-17 on n8n 2.39.6: a 10 s clip resumed after 15 s, a 90 s window from a 10 min source after 66 s.",
+        "height": 300,
+        "width": 380,
+        "color": 4
+      },
+      "id": "b2c3d4e5-1003-4000-8000-000000000103",
+      "name": "Sticky: 3",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {},
+      "id": "b2c3d4e5-0001-4000-8000-000000000001",
+      "name": "Run",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        40,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f1",
+              "name": "video_url",
+              "value": "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4",
+              "type": "string"
+            },
+            {
+              "id": "f2",
+              "name": "logo_url",
+              "value": "https://www.brand-pipe.com/logo.png",
+              "type": "string"
+            },
+            {
+              "id": "f3",
+              "name": "format",
+              "value": "vertical",
+              "type": "string"
+            },
+            {
+              "id": "f4",
+              "name": "audio_normalize",
+              "value": true,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b2c3d4e5-0002-4000-8000-000000000002",
+      "name": "Set job",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        260,
+        400
+      ],
+      "notes": "Add start_s and duration_s here (and to the Submit job body) to cut a window out of a long source."
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.brand-pipe.com/v1/jobs",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ video_url: $json.video_url, logo_url: $json.logo_url, format: $json.format, audio_normalize: $json.audio_normalize, callback_url: $execution.resumeUrl }) }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Idempotency-Key",
+              "value": "={{ $execution.id }}-{{ $itemIndex }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 60000,
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "b2c3d4e5-0003-4000-8000-000000000003",
+      "name": "Submit job",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        400
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Brand-Pipe API Key"
+        }
+      },
+      "notes": "Answers 202 with data.job_id and data.status_url. callback_url is this execution's resume URL."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.success }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "b2c3d4e5-0004-4000-8000-000000000004",
+      "name": "Accepted?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        700,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "resume": "webhook",
+        "httpMethod": "POST",
+        "limitWaitTime": true,
+        "limitType": "afterTimeInterval",
+        "resumeAmount": 15,
+        "resumeUnit": "minutes",
+        "options": {}
+      },
+      "id": "b2c3d4e5-0005-4000-8000-000000000005",
+      "name": "Wait for callback",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        920,
+        320
+      ],
+      "webhookId": "b2c3d4e5-ffff-4000-8000-0000000000ff",
+      "notes": "Method must be POST, the default is GET and Brand-Pipe POSTs. After resume the callback body is under $json.body. On timeout the node passes the 202 response through unchanged."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.body?.job_id }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "b2c3d4e5-0006-4000-8000-000000000006",
+      "name": "Callback arrived?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1140,
+        320
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c1",
+              "leftValue": "={{ $json.body.status }}",
+              "rightValue": "done",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "b2c3d4e5-0007-4000-8000-000000000007",
+      "name": "Job done?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1360,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.body.result_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "video"
+            }
+          }
+        }
+      },
+      "id": "b2c3d4e5-0008-4000-8000-000000000008",
+      "name": "Download result",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1580,
+        160
+      ],
+      "notes": "Binary property 'video' holds the finished MP4."
+    },
+    {
+      "parameters": {
+        "errorMessage": "=Brand-Pipe job {{ $json.body.job_id }} ended as {{ $json.body.status }}: {{ $json.body.error }} (credits_refunded: {{ $json.body.credits_refunded }})"
+      },
+      "id": "b2c3d4e5-0009-4000-8000-000000000009",
+      "name": "Stop: job failed",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        330
+      ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Submit job').first().json.data.status_url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "b2c3d4e5-0010-4000-8000-000000000010",
+      "name": "Poll status",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1360,
+        420
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "name": "Brand-Pipe API Key"
+        }
+      },
+      "notes": "Only reached when no callback came within the wait limit."
+    },
+    {
+      "parameters": {
+        "errorMessage": "=No callback within 15 min. Job {{ $json.data.job_id }} is {{ $json.data.status }}, callback_delivered: {{ $json.data.callback_delivered }}. If it is done and callback_delivered is false, the resume URL was not reachable from the internet (WEBHOOK_URL / tunnel)."
+      },
+      "id": "b2c3d4e5-0011-4000-8000-000000000011",
+      "name": "Stop: no callback",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1580,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "=Brand-Pipe error: {{ $json.error }}"
+      },
+      "id": "b2c3d4e5-0012-4000-8000-000000000012",
+      "name": "Stop: not accepted",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        920,
+        500
+      ]
+    }
+  ],
+  "connections": {
+    "Run": {
+      "main": [
+        [
+          {
+            "node": "Set job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set job": {
+      "main": [
+        [
+          {
+            "node": "Submit job",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Submit job": {
+      "main": [
+        [
+          {
+            "node": "Accepted?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Accepted?": {
+      "main": [
+        [
+          {
+            "node": "Wait for callback",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop: not accepted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for callback": {
+      "main": [
+        [
+          {
+            "node": "Callback arrived?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Callback arrived?": {
+      "main": [
+        [
+          {
+            "node": "Job done?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Poll status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Job done?": {
+      "main": [
+        [
+          {
+            "node": "Download result",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Stop: job failed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Poll status": {
+      "main": [
+        [
+          {
+            "node": "Stop: no callback",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  }
+}

@@ -407,11 +407,11 @@ footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}f
 
 <section id="n8n">
 <h2>n8n</h2>
-<p>Two ready-made workflows are available on the <a href="index.html#n8n">website</a>: <a href="n8n-brand-pipe.json" download>n8n-brand-pipe.json</a> (process and download) and <a href="n8n-brand-pipe-youtube.json" download>n8n-brand-pipe-youtube.json</a> (schedule, generate, process, upload to YouTube).</p>
+<p>Three ready-made workflows are available on the <a href="index.html#n8n">website</a>: <a href="n8n-brand-pipe.json" download>n8n-brand-pipe.json</a> (process and download), <a href="n8n-brand-pipe-youtube.json" download>n8n-brand-pipe-youtube.json</a> (schedule, generate, process, upload to YouTube) and <a href="n8n-brand-pipe-jobs.json" download>n8n-brand-pipe-jobs.json</a> (async job for long clips, the callback resumes a Wait node).</p>
 <ol>
   <li>Create a <em>Header Auth</em> credential named <strong>Brand-Pipe API Key</strong> with header name <code>X-API-Key</code> and your key as the value.</li>
   <li>In the HTTP Request node, add the header <code>Idempotency-Key</code> = <code>{{ $execution.id }}-{{ $itemIndex }}</code> and enable <em>Retry On Fail</em>.</li>
-  <li>For long clips, use <code>POST /v1/jobs</code> and follow it with a <strong>Wait</strong> node set to <em>Resume: On Webhook Call</em>, HTTP method <strong>POST</strong>. Send <code>{{ $execution.resumeUrl }}</code> as <code>callback_url</code>, and set <em>Limit Wait Time</em> so the execution cannot hang forever.</li>
+  <li>For long clips, use <code>POST /v1/jobs</code> and follow it with a <strong>Wait</strong> node set to <em>Resume: On Webhook Call</em>, HTTP method <strong>POST</strong>. Send <code>{{ $execution.resumeUrl }}</code> as <code>callback_url</code>, and set <em>Limit Wait Time</em> so the execution cannot hang forever. <a href="n8n-brand-pipe-jobs.json" download>n8n-brand-pipe-jobs.json</a> is exactly that, with a timeout branch that reads the status URL. The resume URL has to be reachable from the internet (n8n Cloud is; a local instance needs a public <code>WEBHOOK_URL</code>), otherwise the API rejects it at submission.</li>
 </ol>
 </section>
 

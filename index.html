@@ -492,7 +492,7 @@ footer a:hover{color:var(--ink)}
     <div class="card step rv"><span class="n"></span><h3>Add the credential</h3><p>Create a <em>Header Auth</em> credential named exactly <strong>Brand-Pipe API Key</strong>: header name <code>X-API-Key</code>, value your key. Both templates look the credential up by that name, so it only has to be set up once.</p></div>
     <div class="card step rv"><span class="n"></span><h3>Wire it in</h3><p>Replace the <em>Set video</em> node with your generator's output and connect the binary output to YouTube, TikTok or your storage.</p></div>
   </div>
-  <p class="lead rv" style="margin:28px 0 0">Want the whole pipeline? <a href="n8n-brand-pipe-youtube.json" download>n8n-brand-pipe-youtube.json</a> adds a schedule trigger, a placeholder node for your video generator and a YouTube upload step that publishes the result as a Short. The upload node ships disabled so you can run it before connecting a channel.</p>
+  <p class="lead rv" style="margin:28px 0 0">Want the whole pipeline? <a href="n8n-brand-pipe-youtube.json" download>n8n-brand-pipe-youtube.json</a> adds a schedule trigger, a placeholder node for your video generator and a YouTube upload step that publishes the result as a Short. The upload node ships disabled so you can run it before connecting a channel. Clips longer than 60 seconds? <a href="n8n-brand-pipe-jobs.json" download>n8n-brand-pipe-jobs.json</a> submits an async job and lets Brand-Pipe resume an n8n <em>Wait</em> node through its callback, no polling loop. Tested on n8n 2.39.6 with a 90-second cut from a 10-minute source.</p>
 </section>
 
 <section id="faq">
