@@ -19,7 +19,7 @@
     },
     {
       "parameters": {
-        "content": "## Brand-Pipe\nHeader Auth credential named `Brand-Pipe API Key`: header name `X-API-Key`, value your key from https://www.brand-pipe.com. One call fits the clip to 9:16, puts your logo bottom-right and normalises loudness to −14 LUFS; the answer carries a signed download link that is valid for one hour. Only successful jobs cost a credit — the lower branch stops the run with the message from the API.",
+        "content": "## Brand-Pipe\nHeader Auth credential named `Brand-Pipe API Key`: header name `X-API-Key`, value your key from https://www.brand-pipe.com. One call fits the clip to 9:16, puts your logo bottom-right and normalises loudness to −14 LUFS; the answer carries a signed download link that is valid for one hour. Failed jobs are refunded (except an encode that hits the time limit), and the lower branch stops the run with the message from the API.",
         "height": 280,
         "width": 380,
         "color": 4

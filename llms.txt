@@ -31,7 +31,7 @@ Operated from Germany. Contact: support@brand-pipe.com
 
 ## Pricing
 
-- 1 credit per video regardless of length, 2 credits with burned-in captions. Only successful videos cost credits, failed jobs are refunded automatically.
+- 1 credit per video regardless of length, 2 credits with burned-in captions. Failed jobs are refunded automatically, except an encode that runs into the processing time limit.
 - Free: 25 credits, no card. 250 credits €9, 1,000 credits €29, 5,000 credits €99. One-time payments, credits never expire, no subscription. Polar is the merchant of record.
 
 ## Quick example

@@ -35,7 +35,7 @@
     },
     {
       "parameters": {
-        "content": "## 3. Connect the binary output\n*Download result* puts the finished MP4 into the binary property `video`; connect your YouTube, TikTok or storage node to it. The lower branch stops the run with the message from the API, and failed jobs do not cost credits.",
+        "content": "## 3. Connect the binary output\n*Download result* puts the finished MP4 into the binary property `video`; connect your YouTube, TikTok or storage node to it. The lower branch stops the run with the message from the API, and failed jobs are refunded (except an encode that hits the time limit).",
         "height": 250,
         "width": 340,
         "color": 4

@@ -123,7 +123,7 @@
      "name": "Does a video cost one credit regardless of length?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Yes. /v1/process answers within the request and takes up to 60 seconds of output; /v1/jobs takes up to ten minutes. Both cost one credit. A clip the synchronous endpoint cannot finish in time — high frame rates and 4K get there sooner — is refused with a 413 that names /v1/jobs, before anything is charged. With start_s and duration_s you can cut a window out of a longer recording instead of sending it whole."
+      "text": "Yes. /v1/process answers within the request and takes up to 60 seconds of output; /v1/jobs takes up to ten minutes. Both cost one credit, two with burned-in captions. A clip the synchronous endpoint cannot finish in time — high frame rates and 4K get there sooner — is refused with a 413 that names /v1/jobs, and its credit is returned right away. With start_s and duration_s you can cut a window out of a longer recording instead of sending it whole."
      }
     },
     {
@@ -131,7 +131,7 @@
      "name": "What if a job fails?",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Only successful videos cost credits. If the download, the encode or the upload fails after your key was charged, the credit is returned automatically and the error response says so (credits_refunded: true)."
+      "text": "Only successful videos cost credits. If the download, the encode or the upload fails after your key was charged, the credit is returned automatically and the error response says so (credits_refunded: true). One exception: an encode that runs into the processing time limit keeps its credit."
      }
     },
     {
@@ -501,8 +501,8 @@ footer a:hover{color:var(--ink)}
   </div>
   <div class="faq rv">
   <details><summary>Where is my data processed and stored?</summary><p>Processing runs on Google Cloud in Frankfurt. Results are stored on Cloudflare R2 restricted to the EU jurisdiction and deleted after 24 hours; the download link itself expires after one hour.</p></details>
-  <details><summary>Does a video cost one credit regardless of length?</summary><p>Yes. <code>/v1/process</code> answers within the request and takes up to 60 seconds of output; <code>/v1/jobs</code> takes up to ten minutes. Both cost one credit. A clip the synchronous endpoint cannot finish in time — high frame rates and 4K get there sooner — is refused with a 413 that names <code>/v1/jobs</code>, before anything is charged. With <code>start_s</code> and <code>duration_s</code> you can cut a window out of a longer recording instead of sending it whole.</p></details>
-  <details><summary>What if a job fails?</summary><p>Only successful videos cost credits. If the download, the encode or the upload fails after your key was charged, the credit is returned automatically and the error response says so (<code>credits_refunded: true</code>).</p></details>
+  <details><summary>Does a video cost one credit regardless of length?</summary><p>Yes. <code>/v1/process</code> answers within the request and takes up to 60 seconds of output; <code>/v1/jobs</code> takes up to ten minutes. Both cost one credit, two with burned-in captions. A clip the synchronous endpoint cannot finish in time — high frame rates and 4K get there sooner — is refused with a 413 that names <code>/v1/jobs</code>, and its credit is returned right away. With <code>start_s</code> and <code>duration_s</code> you can cut a window out of a longer recording instead of sending it whole.</p></details>
+  <details><summary>What if a job fails?</summary><p>Only successful videos cost credits. If the download, the encode or the upload fails after your key was charged, the credit is returned automatically and the error response says so (<code>credits_refunded: true</code>). One exception: an encode that runs into the processing time limit keeps its credit.</p></details>
   <details><summary>Do credits expire? Do top-ups create a new key?</summary><p>Credits never expire. Buying more with the same email adds them to the key you already have, so nothing changes in your workflow.</p></details>
   <details><summary>I lost my key.</summary><p>Keys are shown once, right after checkout, and are not stored in plaintext on our side. Contact support and we will issue a new key with your remaining credits.</p></details>
   <details><summary>Can you add subtitles?</summary><p>We burn in captions you supply as SRT or WebVTT — the file your transcription step already produces. That is the part that otherwise needs your own server with ffmpeg. We do not transcribe for you yet, so nothing gets misheard. One style, white with a heavy outline, placed clear of the platform interface. A captioned video costs two credits instead of one.</p></details>

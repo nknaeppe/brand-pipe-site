@@ -296,7 +296,7 @@ footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}f
 <tr><td><code>audio_skip_reason</code></td><td>string | null</td><td>Why it did not: <code>not requested</code>, <code>source has no audio stream</code>, or a note that the source measured as silent.</td></tr>
 </tbody></table></div>
 
-<div class="note-box info"><p><strong>Too big for the synchronous endpoint?</strong> Before any work starts, the API estimates the encode time. A source that would not finish in time (roughly: more than ~58 s of 1080p30, ~28 s of 1080p60, ~22 s of 4K60) is refused with <code>413</code> and a message that names <code>POST /v1/jobs</code>. Nothing is charged.</p></div>
+<div class="note-box info"><p><strong>Too big for the synchronous endpoint?</strong> Before any work starts, the API estimates the encode time. A source that would not finish in time (roughly: more than ~58 s of 1080p30, ~28 s of 1080p60, ~22 s of 4K60) is refused with <code>413</code> and a message that names <code>POST /v1/jobs</code>. The credit is returned right away (<code>credits_refunded: true</code>).</p></div>
 </section>
 
 <section id="jobs">
@@ -497,7 +497,7 @@ STATUS_URL=$(curl -s -X POST $API/v1/jobs \
 <ul>
   <li><strong>1 credit</strong> per video, whatever its length. <strong>2 credits</strong> with captions.</li>
   <li>Credits are charged when a request is accepted, and <strong>refunded automatically</strong> if the download, encode or upload fails afterwards. The error response then carries <code>data.credits_refunded: true</code>; failed jobs show the same field.</li>
-  <li>Requests rejected up front (invalid body, blocked URL, bad key, too large for the endpoint) are never charged.</li>
+  <li>Requests rejected up front (invalid body, blocked URL, bad key) are never charged. A source too large for the endpoint is charged and refunded at once.</li>
   <li><strong>One exception:</strong> an encode that runs into the processing time limit keeps its credit (<code>credits_refunded: false</code>). The estimate refuses almost every such source before work starts; what remains is a source that is far denser than it declares.</li>
   <li>Status polls and idempotent replays are free.</li>
   <li>Credits never expire. Top-ups bought with the same email land on your existing key.</li>
