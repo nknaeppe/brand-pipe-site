@@ -1,5 +1,5 @@
 {
-  "name": "Brand-Pipe: format, brand and normalise a video",
+  "name": "Make AI videos Shorts-ready (9:16, logo, loudness) without ffmpeg, works on n8n Cloud",
   "nodes": [
     {
       "parameters": {
@@ -73,7 +73,7 @@
             {
               "id": "f2",
               "name": "logo_url",
-              "value": "https://www.python.org/static/community_logos/python-logo.png",
+              "value": "https://www.brand-pipe.com/logo.png",
               "type": "string"
             },
             {
