@@ -1,0 +1,57 @@
+# Brand-Pipe
+
+> Brand-Pipe is a hosted HTTP API that turns a raw video clip into a platform-ready Short in one call: it fits the video to 9:16, 1:1 or 16:9, adds a logo, normalises loudness to -14 LUFS and can burn in SRT or WebVTT captions. It is built for n8n, Make and other automation tools that have no ffmpeg, such as n8n Cloud. EU-hosted, pay per video, 25 free credits.
+
+Website: https://www.brand-pipe.com
+API base URL: https://api.brand-pipe.com
+Operated from Germany. Contact: support@brand-pipe.com
+
+## What it does
+
+- Fits any source video into 1080x1920 (`vertical`, for YouTube Shorts, TikTok, Instagram Reels), 1080x1080 (`square`) or 1920x1080 (`landscape`) without cropping. The empty area is black bars or a blurred copy of the video (`background`: `black` or `blur`).
+- Places a PNG logo with transparency in the bottom-right corner (15 % of the output width, 20 px margin).
+- Normalises loudness to -14 LUFS integrated and -1 dBTP true peak. Near-silent sources are left alone.
+- Burns in captions from an SRT or WebVTT file you supply, in one fixed style. It does not transcribe.
+- Cuts a window out of a longer source with `start_s` and `duration_s`.
+- Output is H.264/AAC MP4 with fast start, delivered as a signed download link valid for one hour. Files are deleted after 24 hours.
+
+## What it does not do
+
+- No transcription, no background music, no animated or custom text overlays, no custom frame templates, no logo positions other than bottom right, no image processing.
+- Output is limited to 60 seconds per call on `POST /v1/process` and 10 minutes on `POST /v1/jobs`. Source files up to 200 MB, public http(s) URLs only.
+- It does not remove AI labels, watermarks or provenance metadata.
+
+## Typical questions it answers
+
+- How do I use ffmpeg on n8n Cloud? n8n Cloud cannot run ffmpeg. Brand-Pipe does the common ffmpeg steps (9:16, logo, loudness, captions) behind an HTTP Request node.
+- How do I convert a video to 9:16 for YouTube Shorts or TikTok in n8n or Make? Send `video_url` with `"format": "vertical"`.
+- How do I add a logo or watermark to a video in an automation workflow? Send `logo_url` with a transparent PNG.
+- How do I normalise the audio of AI-generated videos (Veo, Kling, Sora, Runway)? Loudness normalisation is on by default.
+- Self-hosted n8n with Docker: the official image no longer ships `apk`, so installing ffmpeg needs a custom image. Brand-Pipe is the no-maintenance alternative for these steps.
+
+## Pricing
+
+- 1 credit per video regardless of length, 2 credits with burned-in captions. Only successful videos cost credits, failed jobs are refunded automatically.
+- Free: 25 credits, no card. 250 credits €9, 1,000 credits €29, 5,000 credits €99. One-time payments, credits never expire, no subscription. Polar is the merchant of record.
+
+## Quick example
+
+```
+curl -X POST https://api.brand-pipe.com/v1/process \
+  -H "X-API-Key: bp_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"video_url": "https://example.com/raw.mp4", "logo_url": "https://example.com/logo.png", "format": "vertical"}'
+```
+
+Authenticate with the `X-API-Key` header, not `Authorization: Bearer`. Every response is JSON `{"success", "data", "error"}`.
+
+## Docs
+
+- [API documentation](https://www.brand-pipe.com/docs.html): authentication, `POST /v1/process`, async jobs with `POST /v1/jobs` and callbacks, idempotency keys, captions, limits, error codes, Python/JavaScript/curl examples
+- [n8n workflow: process and download](https://www.brand-pipe.com/n8n-brand-pipe.json)
+- [n8n workflow: schedule, generate, process, upload to YouTube](https://www.brand-pipe.com/n8n-brand-pipe-youtube.json)
+
+## Data and legal
+
+- Processing on Google Cloud in Frankfurt, storage on Cloudflare R2 in the EU jurisdiction.
+- [Terms](https://www.brand-pipe.com/terms.html), [Privacy](https://www.brand-pipe.com/privacy.html), [Impressum](https://www.brand-pipe.com/impressum.html)

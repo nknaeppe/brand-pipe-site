@@ -3,8 +3,190 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Brand-Pipe — platform-ready AI video in one API call</title>
+<title>Brand-Pipe — 9:16, logo and loudness video API for n8n and Make</title>
 <meta name="description" content="One POST turns a raw AI clip into a platform-ready Short: fit to 9:16, your logo, loudness normalised. Built for n8n and Make pipelines. EU-hosted. Credits never expire.">
+<link rel="canonical" href="https://www.brand-pipe.com/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="alternate" type="text/plain" title="LLM summary" href="/llms.txt">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Brand-Pipe">
+<meta property="og:title" content="Brand-Pipe — 9:16, logo and loudness video API for n8n and Make">
+<meta property="og:description" content="One POST turns a raw AI clip into a platform-ready Short: fit to 9:16, your logo, loudness normalised. Built for n8n and Make pipelines. EU-hosted. Credits never expire.">
+<meta property="og:url" content="https://www.brand-pipe.com/">
+<meta property="og:image" content="https://www.brand-pipe.com/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Brand-Pipe turns a raw AI clip into a 9:16 Short with captions in one API call.">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Brand-Pipe — 9:16, logo and loudness video API for n8n and Make">
+<meta name="twitter:description" content="One POST turns a raw AI clip into a platform-ready Short: fit to 9:16, your logo, loudness normalised. Built for n8n and Make pipelines. EU-hosted. Credits never expire.">
+<meta name="twitter:image" content="https://www.brand-pipe.com/og-image.jpg">
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "Organization",
+   "@id": "https://www.brand-pipe.com/#org",
+   "name": "Brand-Pipe",
+   "alternateName": [
+    "Brand Pipe",
+    "BrandPipe"
+   ],
+   "url": "https://www.brand-pipe.com/",
+   "logo": "https://www.brand-pipe.com/logo.png",
+   "email": "support@brand-pipe.com"
+  },
+  {
+   "@type": "WebSite",
+   "@id": "https://www.brand-pipe.com/#website",
+   "name": "Brand-Pipe",
+   "url": "https://www.brand-pipe.com/",
+   "publisher": {
+    "@id": "https://www.brand-pipe.com/#org"
+   },
+   "inLanguage": "en"
+  },
+  {
+   "@type": "SoftwareApplication",
+   "@id": "https://www.brand-pipe.com/#app",
+   "name": "Brand-Pipe API",
+   "applicationCategory": "MultimediaApplication",
+   "applicationSubCategory": "Video processing API",
+   "operatingSystem": "Web",
+   "url": "https://www.brand-pipe.com/",
+   "image": "https://www.brand-pipe.com/og-image.jpg",
+   "description": "Hosted HTTP API that turns a raw video clip into a platform-ready Short in one call: fit to 9:16, 1:1 or 16:9, logo overlay, loudness normalised to -14 LUFS and burned-in SRT or WebVTT captions. Built for n8n, Make and any HTTP client. EU-hosted.",
+   "featureList": [
+    "Fit to 9:16 vertical, 1:1 square or 16:9 landscape without cropping",
+    "Black bars or blurred background",
+    "PNG logo overlay bottom right",
+    "Loudness normalisation to -14 LUFS",
+    "Burned-in SRT or WebVTT captions",
+    "Async jobs up to 10 minutes with callbacks",
+    "Idempotency keys for safe retries",
+    "Ready-made n8n workflows"
+   ],
+   "offers": [
+    {
+     "@type": "Offer",
+     "name": "Starter, 25 credits",
+     "price": "0",
+     "priceCurrency": "EUR",
+     "url": "https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU"
+    },
+    {
+     "@type": "Offer",
+     "name": "250 credits",
+     "price": "9",
+     "priceCurrency": "EUR",
+     "url": "https://www.brand-pipe.com/#pricing"
+    },
+    {
+     "@type": "Offer",
+     "name": "1,000 credits",
+     "price": "29",
+     "priceCurrency": "EUR",
+     "url": "https://www.brand-pipe.com/#pricing"
+    },
+    {
+     "@type": "Offer",
+     "name": "5,000 credits",
+     "price": "99",
+     "priceCurrency": "EUR",
+     "url": "https://www.brand-pipe.com/#pricing"
+    }
+   ],
+   "publisher": {
+    "@id": "https://www.brand-pipe.com/#org"
+   },
+   "softwareHelp": {
+    "@type": "CreativeWork",
+    "url": "https://www.brand-pipe.com/docs.html"
+   }
+  },
+  {
+   "@type": "FAQPage",
+   "@id": "https://www.brand-pipe.com/#faq",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "Where is my data processed and stored?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Processing runs on Google Cloud in Frankfurt. Results are stored on Cloudflare R2 restricted to the EU jurisdiction and deleted after 24 hours; the download link itself expires after one hour."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does a video cost one credit regardless of length?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. /v1/process answers within the request and takes up to 60 seconds of output; /v1/jobs takes up to ten minutes. Both cost one credit. A clip the synchronous endpoint cannot finish in time — high frame rates and 4K get there sooner — is refused with a 413 that names /v1/jobs, before anything is charged. With start_s and duration_s you can cut a window out of a longer recording instead of sending it whole."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What if a job fails?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Only successful videos cost credits. If the download, the encode or the upload fails after your key was charged, the credit is returned automatically and the error response says so (credits_refunded: true)."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Do credits expire? Do top-ups create a new key?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Credits never expire. Buying more with the same email adds them to the key you already have, so nothing changes in your workflow."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "I lost my key.",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Keys are shown once, right after checkout, and are not stored in plaintext on our side. Contact support and we will issue a new key with your remaining credits."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can you add subtitles?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "We burn in captions you supply as SRT or WebVTT — the file your transcription step already produces. That is the part that otherwise needs your own server with ffmpeg. We do not transcribe for you yet, so nothing gets misheard. One style, white with a heavy outline, placed clear of the platform interface. A captioned video costs two credits instead of one."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Does Brand-Pipe remove AI labels or watermarks?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Brand-Pipe formats, brands and normalises your video. Provenance metadata your generator embeds is not something we strip, and platform disclosure rules remain your responsibility."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "What happens under load?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Requests beyond the service's capacity wait at the edge rather than fail; asynchronous jobs wait in a queue and are never dropped. Each key has a rate limit; a 429 means back off and retry — with an Idempotency-Key, retrying is always safe."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "Can I use it without n8n?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. It is a plain HTTPS API. Make, Zapier, a cron job or a shell script work just as well."
+     }
+    }
+   ]
+  }
+ ]
+}
+</script>
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#06081a">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%232563eb'/><stop offset='.6' stop-color='%237c3aed'/><stop offset='1' stop-color='%23f7b267'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><path d='M28 30h44v10H28zM28 45h30v10H28zM28 60h44v10H28z' fill='white'/></svg>">
