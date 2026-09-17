@@ -380,6 +380,7 @@ footer a:hover{color:var(--ink)}
   html{scroll-behavior:auto}
   .card,.btn{transition:none}
 }
+#cookie-notice{position:fixed;left:16px;right:16px;bottom:16px;z-index:60;margin:0 auto;max-width:720px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:12px 16px;border:1px solid var(--edge);border-radius:14px;background:var(--bg);color:var(--ink-3);font-size:14px;line-height:1.45;box-shadow:0 12px 40px -10px rgba(0,0,0,.6)}#cookie-notice a{color:var(--ink);text-decoration:underline}#cookie-notice button{cursor:pointer;padding:8px 16px;border-radius:999px;border:1px solid var(--edge);background:var(--glass-2);color:var(--ink);font:inherit;font-weight:600}#cookie-notice button:hover{border-color:var(--ink-3)}#cookie-notice[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -550,5 +551,13 @@ footer a:hover{color:var(--ink)}
   els.forEach(function(el){io.observe(el)});
 })();
 </script>
+<div id="cookie-notice" role="status" hidden>
+  <span>No cookies here. Visits are counted with Cloudflare Web Analytics, which sets no cookies and does not track you across sites. <a href="privacy.html">Privacy</a></span>
+  <button type="button" id="cookie-notice-ok">OK</button>
+</div>
+<script>
+(function(){var n=document.getElementById('cookie-notice'),k='bp-notice-seen';try{if(localStorage.getItem(k)==='1')return}catch(e){}n.hidden=false;document.getElementById('cookie-notice-ok').addEventListener('click',function(){n.hidden=true;try{localStorage.setItem(k,'1')}catch(e){}})})();
+</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1411d36346c54cc58be5900d8a6bee86"}'></script>
 </body>
 </html>
