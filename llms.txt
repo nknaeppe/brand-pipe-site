@@ -48,6 +48,7 @@ Authenticate with the `X-API-Key` header, not `Authorization: Bearer`. Every res
 ## Docs
 
 - [API documentation](https://www.brand-pipe.com/docs.html): authentication, `POST /v1/process`, async jobs with `POST /v1/jobs` and callbacks, idempotency keys, captions, limits, error codes, Python/JavaScript/curl examples
+- [apk add ffmpeg fails in the n8n Docker image, and the two ways out](https://www.brand-pipe.com/n8n-ffmpeg.html): why the image has no apk since 2.1.0, the multi-stage Dockerfile that still builds, and the HTTP Request route for n8n Cloud
 - [n8n workflow: process and download](https://www.brand-pipe.com/n8n-brand-pipe.json)
 - [n8n workflow: schedule, generate, process, upload to YouTube](https://www.brand-pipe.com/n8n-brand-pipe-youtube.json)
 - [n8n workflow: async job for long clips, callback resumes a Wait node](https://www.brand-pipe.com/n8n-brand-pipe-jobs.json)

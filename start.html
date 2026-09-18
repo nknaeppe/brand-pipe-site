@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opening checkout — Brand-Pipe</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#06081a">
+<!-- Every "Start free" and "Buy" button on the site comes through here, so Cloudflare Web Analytics
+     counts the click as a view of /start.html before the browser moves on to Polar. The beacon is
+     deferred; the redirect waits for the page load plus a short grace period so the view is sent.
+     ?plan=paid goes to the paid checkout, anything else to the free Starter. -->
+<noscript><meta http-equiv="refresh" content="0; url=https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU"></noscript>
+<style>
+:root{--bg:#06081a;--ink:#eef0fa;--ink-3:#7d84a8;--amber:#f7b267}
+body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:center;padding:24px}
+p{margin:0 0 12px;color:var(--ink-3)}
+a{color:var(--amber)}
+</style>
+</head>
+<body>
+<div>
+  <p>Opening the checkout…</p>
+  <p><a id="go" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Continue to Polar</a> if nothing happens.</p>
+</div>
+<script>
+(function(){
+  var links={
+    starter:"https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU",
+    paid:"https://buy.polar.sh/polar_cl_wvHItL5DXD7JYHj1VB3VeJKxCh7gqxyA79KKj1m9Yik"
+  };
+  var plan=new URLSearchParams(location.search).get("plan");
+  var target=links[plan]||links.starter;
+  document.getElementById("go").href=target;
+  function go(){location.replace(target)}
+  if(document.readyState==="complete"){setTimeout(go,700)}
+  else{addEventListener("load",function(){setTimeout(go,700)})}
+  setTimeout(go,3000);  // the beacon host unreachable must not strand the visitor here
+})();
+</script>
+<div id="cookie-notice" role="status" hidden style="position:fixed;left:16px;right:16px;bottom:16px;margin:0 auto;max-width:720px;padding:12px 16px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:var(--bg);font-size:14px;text-align:left">
+  <span>No cookies here. Visits are counted with Cloudflare Web Analytics, which sets no cookies and does not track you across sites. <a href="privacy.html">Privacy</a></span>
+</div>
+<script>
+(function(){var n=document.getElementById('cookie-notice');try{if(localStorage.getItem('bp-notice-seen')==='1')return}catch(e){}n.hidden=false})();
+</script>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "1411d36346c54cc58be5900d8a6bee86"}'></script>
+</body>
+</html>

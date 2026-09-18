@@ -390,7 +390,7 @@ footer a:hover{color:var(--ink)}
 <header><div class="wrap"><nav>
   <a class="brand" href="#"><i></i>Brand-Pipe</a>
   <ul><li><a href="#how">How it works</a></li><li><a href="#api">API</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#n8n">n8n templates</a></li><li><a href="#faq">FAQ</a></li><li><a href="docs.html">Docs</a></li></ul>
-  <a class="btn primary" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Start free</a>
+  <a class="btn primary" href="start.html">Start free</a>
 </nav></div></header>
 
 <main class="wrap">
@@ -400,7 +400,7 @@ footer a:hover{color:var(--ink)}
     <h1 class="rv">Platform-ready AI video <span>in one API call</span></h1>
     <p class="rv">Send a raw clip from Veo, Kling, Sora or Runway. Get back a Short that fits 9:16, carries your channel logo and sounds right on every platform. No ffmpeg, no server, no filter graphs.</p>
     <div class="cta rv">
-      <a class="btn primary" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Get 25 free credits</a>
+      <a class="btn primary" href="start.html">Get 25 free credits</a>
       <a class="btn" href="#pricing">See pricing</a>
       <small>No card needed</small>
     </div>
@@ -474,10 +474,10 @@ footer a:hover{color:var(--ink)}
     <p class="lead rv">One credit per video, whatever its length; two if you have us burn in captions. Only successful videos cost credits. Credits never expire. Top-ups land on your existing key.</p>
   </div>
   <div class="tiers">
-    <div class="card tier rv"><h3>Starter</h3><div class="amt">€0</div><div class="per">25 credits, once</div><ul><li>All features</li><li>No card needed</li><li>Key shown right after checkout</li></ul><a class="btn" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Start free</a></div>
-    <div class="card tier rv"><h3>250 credits</h3><div class="amt">€9</div><div class="per">3.6 ct per video</div><ul><li>Good for a first channel</li><li>One-time payment</li><li>Never expires</li></ul><a class="btn" href="https://buy.polar.sh/polar_cl_wvHItL5DXD7JYHj1VB3VeJKxCh7gqxyA79KKj1m9Yik">Buy</a></div>
-    <div class="card tier hot rv"><span class="tag">Most popular</span><h3>1,000 credits</h3><div class="amt">€29</div><div class="per">2.9 ct per video</div><ul><li>A month of daily Shorts</li><li>One-time payment</li><li>Never expires</li></ul><a class="btn primary" href="https://buy.polar.sh/polar_cl_wvHItL5DXD7JYHj1VB3VeJKxCh7gqxyA79KKj1m9Yik">Buy</a></div>
-    <div class="card tier rv"><h3>5,000 credits</h3><div class="amt">€99</div><div class="per">2.0 ct per video</div><ul><li>Multiple channels</li><li>One-time payment</li><li>Never expires</li></ul><a class="btn" href="https://buy.polar.sh/polar_cl_wvHItL5DXD7JYHj1VB3VeJKxCh7gqxyA79KKj1m9Yik">Buy</a></div>
+    <div class="card tier rv"><h3>Starter</h3><div class="amt">€0</div><div class="per">25 credits, once</div><ul><li>All features</li><li>No card needed</li><li>Key shown right after checkout</li></ul><a class="btn" href="start.html">Start free</a></div>
+    <div class="card tier rv"><h3>250 credits</h3><div class="amt">€9</div><div class="per">3.6 ct per video</div><ul><li>Good for a first channel</li><li>One-time payment</li><li>Never expires</li></ul><a class="btn" href="start.html?plan=paid">Buy</a></div>
+    <div class="card tier hot rv"><span class="tag">Most popular</span><h3>1,000 credits</h3><div class="amt">€29</div><div class="per">2.9 ct per video</div><ul><li>A month of daily Shorts</li><li>One-time payment</li><li>Never expires</li></ul><a class="btn primary" href="start.html?plan=paid">Buy</a></div>
+    <div class="card tier rv"><h3>5,000 credits</h3><div class="amt">€99</div><div class="per">2.0 ct per video</div><ul><li>Multiple channels</li><li>One-time payment</li><li>Never expires</li></ul><a class="btn" href="start.html?plan=paid">Buy</a></div>
   </div>
   <p class="fine">Prices include VAT where applicable. Payments and invoices are handled by Polar as merchant of record.</p>
 </section>
@@ -494,6 +494,7 @@ footer a:hover{color:var(--ink)}
     <div class="card step rv"><span class="n"></span><h3>Wire it in</h3><p>Replace the <em>Set video</em> node with your generator's output and connect the binary output to YouTube, TikTok or your storage.</p></div>
   </div>
   <p class="lead rv" style="margin:28px 0 0">Want the whole pipeline? <a href="n8n-brand-pipe-youtube.json" download>n8n-brand-pipe-youtube.json</a> adds a schedule trigger, a placeholder node for your video generator and a YouTube upload step that publishes the result as a Short. The upload node ships disabled so you can run it before connecting a channel. Clips longer than 60 seconds? <a href="n8n-brand-pipe-jobs.json" download>n8n-brand-pipe-jobs.json</a> submits an async job and lets Brand-Pipe resume an n8n <em>Wait</em> node through its callback, no polling loop. Tested on n8n 2.39.6 with a 90-second cut from a 10-minute source.</p>
+  <p class="lead rv" style="margin:16px 0 0">Self-hosting and <code>apk add ffmpeg</code> fails since n8n 2.1.0? <a href="n8n-ffmpeg.html">Here is why, the Dockerfile that still builds, and the no-image route.</a></p>
 </section>
 
 <section id="faq">
@@ -517,7 +518,7 @@ footer a:hover{color:var(--ink)}
   <h2 class="rv">Your next clip is one POST away.</h2>
   <p class="rv">25 free credits, no card, the key shown right after checkout.</p>
   <div class="cta rv" style="justify-content:center">
-    <a class="btn primary" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Get 25 free credits</a>
+    <a class="btn primary" href="start.html">Get 25 free credits</a>
     <a class="btn" href="docs.html">Read the docs</a>
   </div>
 </section>
