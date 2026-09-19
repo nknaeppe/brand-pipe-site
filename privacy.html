@@ -72,7 +72,8 @@ footer .row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}f
 <ul>
 <li><strong>Videos and logos you submit.</strong> Downloaded from the URLs you provide, processed in memory on Google Cloud Run (region europe-west3, Frankfurt), and deleted from the worker immediately after the job.</li>
 <li><strong>Results.</strong> Stored on Cloudflare R2 with EU jurisdiction, reachable only through a signed link valid for one hour, and deleted automatically after 24 hours.</li>
-<li><strong>API keys and usage.</strong> Key verification and credit counting are handled by Unkey. We store your Polar customer id, email and credit balance next to your key.</li>
+<li><strong>Free sign-up.</strong> For the free starter credits you enter your email address on api.brand-pipe.com/signup. We store it with a hash of its normalised form (so each mailbox gets the free credits once), the version of the terms you accepted and the time. The form is protected by Cloudflare Turnstile, which checks signals from your browser and your IP address to tell people from bots. Your IP address is also held in memory for one hour to limit sign-ups per network and is not stored.</li>
+<li><strong>API keys and usage.</strong> Key verification and credit counting are handled by Unkey. We store your email, your Polar customer id (after a purchase) and your credit balance next to your key.</li>
 <li><strong>Payments.</strong> Handled by Polar Software Inc. as merchant of record. We receive order events (customer id, email, product, amount) via webhook to credit your key. We never see card data.</li>
 <li><strong>Logs.</strong> Request metadata (timestamps, status codes, job ids, error messages) is kept in Google Cloud Logging for 30 days for operations and abuse prevention.</li>
 </ul>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Opening checkout — Brand-Pipe</title>
+<title>One moment — Brand-Pipe</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-96.png" sizes="96x96" type="image/png">
@@ -11,10 +11,11 @@
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="#06081a">
 <!-- Every "Start free" and "Buy" button on the site comes through here, so Cloudflare Web Analytics
-     counts the click as a view of /start.html before the browser moves on to Polar. The beacon is
-     deferred; the redirect waits for the page load plus a short grace period so the view is sent.
-     ?plan=paid goes to the paid checkout, anything else to the free Starter. -->
-<noscript><meta http-equiv="refresh" content="0; url=https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU"></noscript>
+     counts the click as a view of /start.html before the browser moves on. The beacon is deferred;
+     the redirect waits for the page load plus a short grace period so the view is sent.
+     ?plan=paid goes to the paid Polar checkout, anything else to the free sign-up form on the API
+     (api.brand-pipe.com/signup: email, one box, key shown at once). -->
+<noscript><meta http-equiv="refresh" content="0; url=https://api.brand-pipe.com/signup"></noscript>
 <style>
 :root{--bg:#06081a;--ink:#eef0fa;--ink-3:#7d84a8;--amber:#f7b267}
 body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--bg);color:var(--ink);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;text-align:center;padding:24px}
@@ -24,13 +25,13 @@ a{color:var(--amber)}
 </head>
 <body>
 <div>
-  <p>Opening the checkout…</p>
-  <p><a id="go" href="https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU">Continue to Polar</a> if nothing happens.</p>
+  <p>One moment…</p>
+  <p><a id="go" href="https://api.brand-pipe.com/signup">Continue</a> if nothing happens.</p>
 </div>
 <script>
 (function(){
   var links={
-    starter:"https://buy.polar.sh/polar_cl_HDetoegoEqb90hAmI7uRC6soDiUiFQ5MMyRG309ppHU",
+    starter:"https://api.brand-pipe.com/signup",
     paid:"https://buy.polar.sh/polar_cl_wvHItL5DXD7JYHj1VB3VeJKxCh7gqxyA79KKj1m9Yik"
   };
   var plan=new URLSearchParams(location.search).get("plan");
